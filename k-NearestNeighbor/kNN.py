@@ -45,7 +45,7 @@ def file2matrix(filename):
         index += 1
     return returnMat, classLabelVector
 
-#归一化特征值
+#归一化特征值，将数字特征值转化到0到1的区间
 def autoNorm(dataSet):
     minVals = dataSet.min(0)
     maxVals = dataSet.max(0)
@@ -56,8 +56,9 @@ def autoNorm(dataSet):
     normDataSet = normDataSet / tile(ranges, (m, 1))
     return normDataSet, ranges, minVals
 
+# 测试分类器效果
 def datingClassTest():
-    hoRatio = 0.50
+    hoRatio = 0.10
     datingDataMat, datingLabels = file2matrix('datingTestSet2.txt')     #从文件中载入数据集
     normMat, ranges, minVals = autoNorm(datingDataMat)
     m = normMat.shape[0]
