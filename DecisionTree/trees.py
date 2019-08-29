@@ -27,3 +27,14 @@ def createDataSet():
             [0, 1, 'no']]
     labels = ['no surfacing', 'flippers']
     return dataSet, labels
+
+# 划分数据集
+# 输入参数：待划分的数据集、划分数据集的特征、特征的返回值
+def splitDataSet(dataSet, axis, value):
+    retDataSet = []
+    for featVec in dataSet:
+        if featVec[axis] == value:
+            reducedFeatVec = featVec[:axis]
+            reducedFeatVec.extend(featVec[axis+1:])
+            retDataSet.append(reducedFeatVec)
+    return retDataSet
