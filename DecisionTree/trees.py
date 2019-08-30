@@ -1,4 +1,5 @@
 from math import log
+import operator
 
 # 计算给定数据集的熵
 def calcShannonEnt(dataSet):
@@ -38,3 +39,61 @@ def splitDataSet(dataSet, axis, value):
             reducedFeatVec.extend(featVec[axis+1:])
             retDataSet.append(reducedFeatVec)
     return retDataSet
+
+# 选择最好的数据集划分方式
+def chooseBestFeatureToSplit(dataSet):
+    numFeatures = len(dataSet[0]) - 1
+    baseEntropy = calcShannonEnt(dataSet)
+    bestInfoGain = 0.0
+    bestFeature = -1
+
+    for i in range(numFeatures):
+        # 创建唯一的分类标签列表
+        featList = [example[i] for example in dataSet]      # 列表推导式
+        uniqueVals = set(featList)      # 集合，得到列表中的唯一的元素值
+        newEntropy = 0.0
+        # 计算每种划分方式的信息熵
+        for value in uniqueVals:
+            subDataSet = splitDataSet(dataSet, i, value)
+            prob = len(subDataSet) / float(len(dataSet))
+            newEntropy += prob * calcShannonEnt(subDataSet)
+        infoGain = baseEntropy - newEntropy
+        # 计算最好的信息增益
+        if(infoGain > bestInfoGain):
+            bestInfoGain = infoGain
+            bestFeature = i
+    return bestFeature
+
+# 多数表决，用于决定如何定义叶子节点
+def majorityCnt(classList):
+    classCount = {}     # 字典，存储classList每个类标签出现的频率
+    for vote in classList:
+        if vote not in classCount.keys():
+            classCount[vote] = 0
+        classCount[vote] += 1
+    # 利用operator操作键值排序字典
+    sortedClassCount = sorted(classCount.items(), key=operator.itemgetter(1), reversed=True)
+    return sortedClassCount[0][0]       # 返回出现次数最多的分类名称
+
+# 创建树
+# 输入参数：数据集，标签列表
+def createTree(dataSet, labels):
+    classList = [example[-1] for example in dataSet]
+    # 类别完全相同则停止继续划分
+    if classList.count(classList[0]) == len(classList):
+        return classList[0]
+    # 遍历完所有特征时返回出现次数最多的
+    if len(dataSet[0]) == 1:
+        return majorityCnt(classList)
+    bestFeat = chooseBestFeatureToSplit(dataSet)
+    bestFeatLabel = labels[bestFeat]
+    myTree = {bestFeatLabel:{}}     # 用字典变量存储树的信息
+    # 得到列表包含的所有属性值
+    del(labels[bestFeat])
+    featValues = [example[bestFeat] for example in dataSet]
+    uniqueVals = set(featValues)
+
+    for value in uniqueVals:
+        subLabels = labels[:]       # 复制标签，因为python列表是传引用
+        myTree[bestFeatLabel][value] = createTree(splitDataSet(dataSet, bestFeat, value), subLabels)
+    return myTree
