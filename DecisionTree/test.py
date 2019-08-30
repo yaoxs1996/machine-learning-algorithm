@@ -1,6 +1,7 @@
 import trees
+import treePlotter
 
-myDat, labels = trees.createDataSet()
+# myDat, labels = trees.createDataSet()
 '''
 # print(myDat)
 print(trees.calcShannonEnt(myDat))
@@ -18,6 +19,15 @@ print(trees.chooseBestFeatureToSplit(myDat))        #表明第0个特征是最�
 print(myDat)
 '''
 
+'''
 # 创建树的测试代码
 myTree = trees.createTree(myDat, labels)
 print(myTree)
+'''
+
+# 绘制树的图形
+# treePlotter.createPlot()
+
+myTree = treePlotter.retrieveTree(0)
+print(treePlotter.getNumLeafs(myTree))
+print(treePlotter.getTreeDepth(myTree))
