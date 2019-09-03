@@ -28,6 +28,16 @@ print(myTree)
 # 绘制树的图形
 # treePlotter.createPlot()
 
+'''
+print(treePlotter.retrieveTree(1))
 myTree = treePlotter.retrieveTree(0)
 print(treePlotter.getNumLeafs(myTree))
 print(treePlotter.getTreeDepth(myTree))
+'''
+
+# 绘制树
+myTree = treePlotter.retrieveTree(0)
+# treePlotter.createPlot(myTree)      # 没有坐标轴标签
+myTree['no surfacing'][3] = 'maybe'
+print(myTree)
+treePlotter.createPlot(myTree)
