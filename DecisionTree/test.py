@@ -45,6 +45,15 @@ treePlotter.createPlot(myTree)
 '''
 
 # 使用pickle模块存储决策树
+'''
 myTree = treePlotter.retrieveTree(0)
 trees.storeTree(myTree, 'classifierStorage.txt')
 print(trees.grabTree('classifierStorage.txt'))
+'''
+
+# 隐性眼镜数据集
+fr = open('lenses.txt')
+lenses = [inst.strip().split('\t') for inst in fr.readlines()]
+lensesLabels = ['age', 'prescript', 'astigmatic', 'tearRate']
+lensesTree = trees.createTree(lenses, lensesLabels)
+treePlotter.createPlot(lensesTree)
