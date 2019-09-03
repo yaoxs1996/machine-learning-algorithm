@@ -36,8 +36,15 @@ print(treePlotter.getTreeDepth(myTree))
 '''
 
 # 绘制树
+'''
 myTree = treePlotter.retrieveTree(0)
 # treePlotter.createPlot(myTree)      # 没有坐标轴标签
 myTree['no surfacing'][3] = 'maybe'
 print(myTree)
 treePlotter.createPlot(myTree)
+'''
+
+# 使用pickle模块存储决策树
+myTree = treePlotter.retrieveTree(0)
+trees.storeTree(myTree, 'classifierStorage.txt')
+print(trees.grabTree('classifierStorage.txt'))

@@ -1,5 +1,6 @@
 from math import log
 import operator
+import pickle
 
 # 计算给定数据集的熵
 def calcShannonEnt(dataSet):
@@ -97,3 +98,30 @@ def createTree(dataSet, labels):
         subLabels = labels[:]       # 复制标签，因为python列表是传引用
         myTree[bestFeatLabel][value] = createTree(splitDataSet(dataSet, bestFeat, value), subLabels)
     return myTree
+
+# 使用决策树的分类函数
+def classify(inputTree, featLabels, testVec):
+    firstStr = inputTree.keys()[0]
+    secondDict = inputTree[firstStr]
+    featIndex = featLabels.index(firstStr)      # 将标签字符串转换为索引
+    # 递归遍历整棵树
+    for key in secondDict.keys():
+        # 比较testVec变量的值与树节点的值
+        if testVec[featIndex] == key:
+            if type(secondDict[key]).__name__ == 'dict':
+                classLabel = classify(secondDict[key], featLabels, testVec)
+            # 达到叶子节点，返回当前节点的分类标签
+            else:
+                classLabel = secondDict[key]
+    return classLabel
+
+# 使用pickle模块存储决策树
+def storeTree(inputTree, filename):
+    fw = open(filename, 'wb+')      # 使用二进制读取模式，读取时同理
+    pickle.dump(inputTree, fw)
+    fw.close()
+
+def grabTree(filename):
+    fr = open(filename, 'rb')
+    return pickle.load(fr)
+
