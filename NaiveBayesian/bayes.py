@@ -58,9 +58,13 @@ def trainNB0(trainMatrix, trainCategory):
     p1Vect = p1Num / p1Denom
     p0Vect = p0Num / p0Denom
     '''
-    # 取log，防止下溢
-    p1Vect = math.log(p1Num / p1Denom)
-    p0Vect = math.log(p0Num / p0Denom)
+    # 取log，防止下溢。log每次只处理一个数字，对矩阵操作，需要进行遍历
+    # p1Vect = math.log(p1Num / p1Denom)
+    # p0Vect = math.log(p0Num / p0Denom)
+    a = p1Num / p1Denom
+    b = p0Num / p0Denom
+    p1Vect = [math.log(x) for x in a]
+    p0Vect = [math.log(x) for x in b]
     return p0Vect, p1Vect, pAbusive
 
 # 朴素贝叶斯分类函数
